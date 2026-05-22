@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ZodError } from "zod";
 import { env } from "../config/env";
 import { ExternalServiceError, NotFoundError } from "../errors/app-errors";
 import {
@@ -26,6 +27,12 @@ export const brasilApiClient = {
         throw new ExternalServiceError(
           "BrasilAPI indisponível ou retornou erro",
           { status: err.response?.status, code: err.code }
+        );
+      }
+      if (err instanceof ZodError) {
+        throw new ExternalServiceError(
+          "BrasilAPI retornou estrutura inesperada",
+          { fieldErrors: err.flatten().fieldErrors }
         );
       }
       throw err;
