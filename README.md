@@ -29,7 +29,7 @@ Duas aplicações independentes em pastas irmãs:
 ```
 findcnpj/
 ├── api/   → backend REST em Node.js + Express + TypeScript
-└── web/   → frontend SPA em Vite + React + TypeScript (próxima fase)
+└── web/   → frontend SPA em Vite + React + TypeScript
 ```
 
 Cada uma tem o próprio `package.json` e ciclo de vida. A comunicação acontece via HTTP/JSON na fronteira `web → api`.
@@ -47,7 +47,12 @@ Cada uma tem o próprio `package.json` e ciclo de vida. A comunicação acontece
 
 ### Frontend (`web/`)
 
-- (a definir na próxima fase)
+- Vite + React 18
+- TypeScript 5 (strict)
+- TailwindCSS
+- TanStack Query (data fetching)
+- Zod (validação de formulário)
+- Axios (cliente HTTP)
 
 ## Pré-requisitos
 
@@ -60,13 +65,22 @@ Cada uma tem o próprio `package.json` e ciclo de vida. A comunicação acontece
 git clone <repo-url>
 cd findcnpj
 
+# Backend
 cd api
 npm install
+cd ..
+
+# Frontend
+cd web
+npm install
+cd ..
 ```
 
 ## Variáveis de Ambiente
 
-Copie `api/.env.example` para `api/.env` e ajuste se necessário. Os valores padrão funcionam para desenvolvimento local.
+Copie os arquivos `.env.example` para `.env` em cada aplicação. Os valores padrão funcionam para desenvolvimento local.
+
+### Backend (`api/.env`)
 
 | Variável | Padrão | Descrição |
 |---|---|---|
@@ -75,7 +89,15 @@ Copie `api/.env.example` para `api/.env` e ajuste se necessário. Os valores pad
 | `BRASILAPI_BASE_URL` | `https://brasilapi.com.br/api` | URL base da BrasilAPI |
 | `LOG_LEVEL` | `info` | Nível mínimo de log (`fatal` ≤ `info` ≤ `trace`) |
 
+### Frontend (`web/.env`)
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `VITE_API_BASE_URL` | `http://localhost:3000` | URL base do backend |
+
 ## Como Rodar Localmente
+
+Backend e frontend rodam em terminais separados.
 
 ### Backend
 
@@ -91,16 +113,15 @@ A API sobe em `http://localhost:3000`. Verifique com:
 curl http://localhost:3000/health
 ```
 
-Resposta esperada:
+### Frontend
 
-```json
-{
-  "status": "ok",
-  "service": "findcnpj-api",
-  "timestamp": "...",
-  "uptime": 0.123
-}
+```bash
+cd web
+cp .env.example .env
+npm run dev
 ```
+
+A interface sobe em `http://localhost:5173` e consome o backend automaticamente.
 
 ## Endpoints da API
 
