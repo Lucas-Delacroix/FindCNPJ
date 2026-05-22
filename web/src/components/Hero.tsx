@@ -27,12 +27,6 @@ export const Hero = ({ children }: HeroProps) => {
               A partir de um CNPJ, identifique segmento, porte, faixa de
               funcionários e o cargo do contato dentro do quadro societário.
             </p>
-
-            <dl className="mt-10 grid max-w-md grid-cols-3 gap-x-6 border-t border-line pt-6">
-              <Stat label="Segmentos" value="18" />
-              <Stat label="Códigos CNAE" value="1.3K" />
-              <Stat label="Latência" value="<2s" />
-            </dl>
           </div>
           <div className="md:col-span-5">{children}</div>
         </div>
@@ -56,20 +50,4 @@ const Underline = () => (
       fill="none"
     />
   </svg>
-);
-
-interface StatProps {
-  label: string;
-  value: string;
-}
-
-const Stat = ({ label, value }: StatProps) => (
-  <div>
-    <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
-      {label}
-    </dt>
-    <dd className="mt-1 font-display text-2xl font-bold tracking-tight text-ink">
-      {value}
-    </dd>
-  </div>
 );
