@@ -1,8 +1,12 @@
 import { brasilApiClient } from "../integrations/brasilapi.client";
+import { viaCepClient, type CepInfo } from "../integrations/viacep.client";
 import { ValidationError } from "../errors/app-errors";
 import { isValidCnpj } from "../domain/cnpj-validator";
 import { formatCnaeCode, mapCnaeToSegment } from "../domain/cnae-mapper";
-import { mapCompanySize } from "../domain/company-size";
+import {
+  mapCompanySize,
+  normalizeTaxRegime,
+} from "../domain/company-size";
 import { matchPartnerByName } from "../domain/partner-role-matcher";
 import {
   calculateAgeInYears,
@@ -18,9 +22,36 @@ import type {
   EnrichedCompany,
 } from "../schemas/cnpj.schema";
 
+const pickLatestTaxRegime = (
+  regimes: BrasilApiCnpjResponse["regime_tributario"]
+) => {
+  if (!regimes || regimes.length === 0) return null;
+  const sorted = [...regimes].sort((a, b) => (b.ano ?? 0) - (a.ano ?? 0));
+  const latest = sorted[0];
+  if (!latest || !latest.forma_de_tributacao) return null;
+  const normalized = normalizeTaxRegime(latest.forma_de_tributacao);
+  if (!normalized) return null;
+  return { latest: normalized, year: latest.ano };
+};
+
+const mapEstablishment = (
+  code: number | null | undefined,
+  description: string | null | undefined
+): EnrichedCompany["establishment"] => {
+  if (code === 1) return { type: "Matriz", code };
+  if (code === 2) return { type: "Filial", code };
+  if (description) {
+    const upper = description.toUpperCase();
+    if (upper.includes("MATRIZ")) return { type: "Matriz", code: code ?? null };
+    if (upper.includes("FILIAL")) return { type: "Filial", code: code ?? null };
+  }
+  return { type: "Não informado", code: code ?? null };
+};
+
 const enrich = (
   raw: BrasilApiCnpjResponse,
-  contactName: string | undefined
+  contactName: string | undefined,
+  cepInfo: CepInfo | null
 ): EnrichedCompany => {
   const legalName = titleCase(raw.razao_social);
   const tradeName = raw.nome_fantasia ? titleCase(raw.nome_fantasia) : null;
@@ -36,7 +67,19 @@ const enrich = (
   const zipCode = formatZipCode(raw.cep);
   const shareCapital = raw.capital_social ?? 0;
 
-  const companySize = mapCompanySize(raw.codigo_porte, shareCapital);
+  const taxRegime = pickLatestTaxRegime(raw.regime_tributario);
+
+  const companySize = mapCompanySize({
+    codigoPorte: raw.codigo_porte,
+    shareCapital,
+    taxRegime: taxRegime?.latest,
+  });
+
+  const secondaryActivities = raw.cnaes_secundarios.map((c) => ({
+    code: formatCnaeCode(c.codigo),
+    description: c.descricao,
+    segment: mapCnaeToSegment(c.codigo),
+  }));
 
   return {
     identification: {
@@ -50,12 +93,17 @@ const enrich = (
       active: raw.descricao_situacao_cadastral.toUpperCase() === "ATIVA",
       since: raw.data_situacao_cadastral ?? null,
     },
+    establishment: mapEstablishment(
+      raw.identificador_matriz_filial,
+      raw.descricao_identificador_matriz_filial
+    ),
     classification: {
       cnae: {
         code: formatCnaeCode(raw.cnae_fiscal),
         description: raw.cnae_fiscal_descricao,
         segment: mapCnaeToSegment(raw.cnae_fiscal),
       },
+      secondaryActivities,
       size: {
         code:
           raw.codigo_porte !== null && raw.codigo_porte !== undefined
@@ -64,6 +112,9 @@ const enrich = (
         description: titleCase(raw.porte ?? ""),
         category: companySize.category,
         estimatedEmployeeRange: companySize.estimatedEmployeeRange,
+        revenueBand: companySize.revenueBand,
+        confidence: companySize.confidence,
+        signals: companySize.signals,
       },
       legalNature: raw.natureza_juridica ?? "",
     },
@@ -91,12 +142,14 @@ const enrich = (
       zipCode,
       city,
       state: raw.uf ?? null,
+      ibgeCode: cepInfo?.ibgeCode ?? null,
     },
     financial: {
       shareCapital,
       shareCapitalFormatted: formatCurrencyBRL(shareCapital),
       optsForSimples: raw.opcao_pelo_simples ?? false,
       optsForMei: raw.opcao_pelo_mei ?? false,
+      taxRegime,
     },
     history: {
       openingDate: raw.data_inicio_atividade,
@@ -122,6 +175,7 @@ export const cnpjService = {
       );
     }
     const raw = await brasilApiClient.findCnpj(digits);
-    return enrich(raw, contactName);
+    const cepInfo = await viaCepClient.findByCep(raw.cep);
+    return enrich(raw, contactName, cepInfo);
   },
 };

@@ -22,6 +22,20 @@ const qsaEntrySchema = z
   })
   .passthrough();
 
+const cnaeSecundarioSchema = z
+  .object({
+    codigo: z.number(),
+    descricao: z.string(),
+  })
+  .passthrough();
+
+const regimeTributarioSchema = z
+  .object({
+    ano: z.number(),
+    forma_de_tributacao: z.string().nullable().optional(),
+  })
+  .passthrough();
+
 export const brasilApiCnpjResponseSchema = z
   .object({
     cnpj: z.string(),
@@ -32,12 +46,17 @@ export const brasilApiCnpjResponseSchema = z
     data_inicio_atividade: z.string(),
     cnae_fiscal: z.number(),
     cnae_fiscal_descricao: z.string(),
+    cnaes_secundarios: z.array(cnaeSecundarioSchema).default([]),
     porte: z.string().nullable().optional(),
     codigo_porte: z.number().nullable().optional(),
     natureza_juridica: z.string().nullable().optional(),
+    codigo_natureza_juridica: z.number().nullable().optional(),
     capital_social: z.number().nullable().optional(),
     opcao_pelo_simples: z.boolean().nullable().optional(),
     opcao_pelo_mei: z.boolean().nullable().optional(),
+    regime_tributario: z.array(regimeTributarioSchema).default([]),
+    identificador_matriz_filial: z.number().nullable().optional(),
+    descricao_identificador_matriz_filial: z.string().nullable().optional(),
     ddd_telefone_1: z.string().nullable().optional(),
     ddd_telefone_2: z.string().nullable().optional(),
     descricao_tipo_de_logradouro: z.string().nullable().optional(),
@@ -61,6 +80,8 @@ export interface LeadMatch {
   since: string | null;
 }
 
+export type SizeConfidence = "high" | "medium" | "low";
+
 export interface EnrichedCompany {
   identification: {
     cnpj: string;
@@ -73,17 +94,29 @@ export interface EnrichedCompany {
     active: boolean;
     since: string | null;
   };
+  establishment: {
+    type: "Matriz" | "Filial" | "Não informado";
+    code: number | null;
+  };
   classification: {
     cnae: {
       code: string;
       description: string;
       segment: string;
     };
+    secondaryActivities: Array<{
+      code: string;
+      description: string;
+      segment: string;
+    }>;
     size: {
       code: string;
       description: string;
       category: string;
       estimatedEmployeeRange: string;
+      revenueBand: string | null;
+      confidence: SizeConfidence;
+      signals: string[];
     };
     legalNature: string;
   };
@@ -101,12 +134,17 @@ export interface EnrichedCompany {
     zipCode: string | null;
     city: string | null;
     state: string | null;
+    ibgeCode: string | null;
   };
   financial: {
     shareCapital: number;
     shareCapitalFormatted: string;
     optsForSimples: boolean;
     optsForMei: boolean;
+    taxRegime: {
+      latest: string;
+      year: number;
+    } | null;
   };
   history: {
     openingDate: string;
