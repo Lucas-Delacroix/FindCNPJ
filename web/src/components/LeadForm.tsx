@@ -118,7 +118,7 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
             inputMode="numeric"
             value={cnpj}
             onChange={(e) => setCnpj(maskCnpj(e.target.value))}
-            className={inputClass(errors.cnpj)}
+            className={`${inputClass(errors.cnpj)} font-mono tracking-wide`}
             placeholder="00.000.000/0000-00"
             maxLength={18}
           />
@@ -128,7 +128,7 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
       <button
         type="submit"
         disabled={isLoading}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-brand transition hover:bg-brand-dark hover:shadow-brand-lg disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+        className="group inline-flex w-full items-center justify-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-brand transition-all duration-200 hover:bg-brand-dark hover:shadow-brand-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
       >
         {isLoading ? (
           <>
@@ -136,7 +136,10 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
           </>
         ) : (
           <>
-            Enriquecer lead <Arrow />
+            Enriquecer lead{" "}
+            <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+              <Arrow />
+            </span>
           </>
         )}
       </button>

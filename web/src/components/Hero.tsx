@@ -8,48 +8,68 @@ export const Hero = ({ children }: HeroProps) => {
   return (
     <section className="bg-lilac-fade">
       <div className="mx-auto max-w-container px-4 pt-14 pb-20 md:px-6 md:pt-24 md:pb-28">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-start md:gap-16">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-pill bg-brand-soft px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-dark">
-              <SparkIcon />
-              Enriquecimento de leads
-            </span>
-            <h1 className="mt-6 font-display text-display-1 text-ink">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:items-start md:gap-12 lg:gap-20">
+          <div className="md:col-span-7">
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-ink-muted">
+              <span className="text-brand">●</span> Lead intelligence · Receita
+              Federal
+            </p>
+
+            <h1 className="mt-6 font-display text-display-1 tracking-tightest text-ink">
               Conheça melhor seus leads em{" "}
-              <span className="text-brand">segundos</span>
+              <span className="relative whitespace-nowrap">
+                segundos
+                <Underline />
+              </span>
             </h1>
-            <p className="mt-6 max-w-xl text-lead text-ink-secondary">
+
+            <p className="mt-7 max-w-lg text-lead text-ink-secondary">
               A partir de um CNPJ, identifique segmento, porte, faixa de
               funcionários e o cargo do contato dentro do quadro societário.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 text-sm text-ink-secondary">
-              <Bullet>CNAE → Segmento</Bullet>
-              <Bullet>Porte estimado</Bullet>
-              <Bullet>Cargo no QSA</Bullet>
-            </div>
+
+            <dl className="mt-10 grid max-w-md grid-cols-3 gap-x-6 border-t border-line pt-6">
+              <Stat label="Segmentos" value="18" />
+              <Stat label="Códigos CNAE" value="1.3K" />
+              <Stat label="Latência" value="<2s" />
+            </dl>
           </div>
-          <div>{children}</div>
+          <div className="md:col-span-5">{children}</div>
         </div>
       </div>
     </section>
   );
 };
 
-const SparkIcon = () => (
+const Underline = () => (
   <svg
-    width="10"
-    height="10"
-    viewBox="0 0 10 10"
-    fill="currentColor"
     aria-hidden
+    viewBox="0 0 220 14"
+    preserveAspectRatio="none"
+    className="absolute -bottom-2 left-0 h-2 w-full text-brand"
   >
-    <path d="M5 0l1.3 3.3L10 5l-3.7 1.7L5 10 3.7 6.7 0 5l3.7-1.7L5 0z" />
+    <path
+      d="M2 10 C 40 2, 80 12, 120 6 S 200 2, 218 8"
+      stroke="currentColor"
+      strokeWidth="3"
+      strokeLinecap="round"
+      fill="none"
+    />
   </svg>
 );
 
-const Bullet = ({ children }: { children: ReactNode }) => (
-  <span className="inline-flex items-center gap-1.5">
-    <span className="h-1.5 w-1.5 rounded-pill bg-brand" />
-    {children}
-  </span>
+interface StatProps {
+  label: string;
+  value: string;
+}
+
+const Stat = ({ label, value }: StatProps) => (
+  <div>
+    <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+      {label}
+    </dt>
+    <dd className="mt-1 font-display text-2xl font-bold tracking-tight text-ink">
+      {value}
+    </dd>
+  </div>
 );

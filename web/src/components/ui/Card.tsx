@@ -2,43 +2,42 @@ import type { ReactNode } from "react";
 
 interface CardProps {
   title?: string;
+  index?: string;
   highlight?: boolean;
   children: ReactNode;
 }
 
-export const Card = ({ title, highlight = false, children }: CardProps) => {
+export const Card = ({
+  title,
+  index,
+  highlight = false,
+  children,
+}: CardProps) => {
   const wrapperClass = highlight
-    ? "border-brand/20 bg-gradient-to-br from-surface-lilac/40 to-surface"
-    : "border-line-soft bg-surface";
+    ? "border-line-soft before:absolute before:left-0 before:top-8 before:bottom-8 before:w-[3px] before:rounded-r-full before:bg-brand"
+    : "border-line-soft";
 
   return (
     <section
-      className={`rounded-card border ${wrapperClass} p-6 shadow-soft md:p-8`}
+      className={`relative overflow-hidden rounded-card border bg-surface p-6 shadow-soft md:p-8 ${wrapperClass}`}
     >
       {title && (
-        <header className="mb-5 flex items-center gap-3">
-          {highlight && (
-            <span className="inline-flex items-center gap-1 rounded-pill bg-brand-soft px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-brand-dark">
-              <SparkIcon />
-              Enriquecido
+        <header className="mb-5 flex items-baseline gap-3">
+          {index && (
+            <span
+              className={`font-mono text-xs font-medium tracking-wider ${
+                highlight ? "text-brand" : "text-ink-muted"
+              }`}
+            >
+              {index}
             </span>
           )}
-          <h2 className="text-base font-bold text-ink">{title}</h2>
+          <h2 className="font-display text-base font-bold tracking-tight text-ink">
+            {title}
+          </h2>
         </header>
       )}
       {children}
     </section>
   );
 };
-
-const SparkIcon = () => (
-  <svg
-    width="9"
-    height="9"
-    viewBox="0 0 10 10"
-    fill="currentColor"
-    aria-hidden
-  >
-    <path d="M5 0l1.3 3.3L10 5l-3.7 1.7L5 10 3.7 6.7 0 5l3.7-1.7L5 0z" />
-  </svg>
-);

@@ -39,6 +39,10 @@ export default {
           "system-ui",
           "sans-serif",
         ],
+        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+      },
+      letterSpacing: {
+        tightest: "-0.04em",
       },
       fontSize: {
         "display-1": [
@@ -89,6 +93,15 @@ export default {
       backgroundImage: {
         "lilac-fade":
           "linear-gradient(180deg, rgba(244,241,255,0.6) 0%, rgba(255,255,255,0) 100%)",
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards",
       },
     },
   },
