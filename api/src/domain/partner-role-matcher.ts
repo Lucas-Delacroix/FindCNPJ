@@ -1,12 +1,10 @@
 import type { LeadMatch, QsaEntry } from "../schemas/cnpj.schema";
 import { titleCase } from "./formatters";
 
+const DIACRITICS = /\p{Mn}/gu;
+
 const normalize = (value: string): string =>
-  value
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toUpperCase()
-    .trim();
+  value.normalize("NFD").replace(DIACRITICS, "").toUpperCase().trim();
 
 export const matchPartnerByName = (
   contactName: string,
