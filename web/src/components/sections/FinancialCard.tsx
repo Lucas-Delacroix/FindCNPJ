@@ -30,6 +30,23 @@ export const FinancialCard = ({ financial, history }: Props) => {
             </span>
           </dd>
         </div>
+
+        {financial.taxRegime && (
+          <div className="md:col-span-2">
+            <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+              Regime tributário
+            </dt>
+            <dd className="mt-1.5 flex items-baseline gap-2">
+              <span className="text-base font-semibold text-ink">
+                {financial.taxRegime.latest}
+              </span>
+              <span className="font-mono text-xs text-ink-muted">
+                referência {financial.taxRegime.year}
+              </span>
+            </dd>
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2 md:col-span-2">
           {financial.optsForSimples && <Tag>Optante pelo Simples</Tag>}
           {financial.optsForMei && <Tag>MEI</Tag>}

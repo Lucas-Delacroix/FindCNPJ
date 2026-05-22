@@ -11,11 +11,10 @@ export const AddressCard = ({ data }: Props) => {
       <p className="text-sm leading-relaxed text-ink-secondary">
         {data.full || "—"}
       </p>
-      {data.zipCode && (
-        <p className="mt-3 font-mono text-xs text-ink-muted">
-          CEP {data.zipCode}
-        </p>
-      )}
+      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-xs text-ink-muted">
+        {data.zipCode && <span>CEP {data.zipCode}</span>}
+        {data.ibgeCode && <span>IBGE {data.ibgeCode}</span>}
+      </div>
     </Card>
   );
 };

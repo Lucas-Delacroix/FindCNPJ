@@ -4,6 +4,8 @@ export interface LeadMatch {
   since: string | null;
 }
 
+export type SizeConfidence = "high" | "medium" | "low";
+
 export interface EnrichedCompany {
   identification: {
     cnpj: string;
@@ -16,17 +18,29 @@ export interface EnrichedCompany {
     active: boolean;
     since: string | null;
   };
+  establishment: {
+    type: "Matriz" | "Filial" | "Não informado";
+    code: number | null;
+  };
   classification: {
     cnae: {
       code: string;
       description: string;
       segment: string;
     };
+    secondaryActivities: Array<{
+      code: string;
+      description: string;
+      segment: string;
+    }>;
     size: {
       code: string;
       description: string;
       category: string;
       estimatedEmployeeRange: string;
+      revenueBand: string | null;
+      confidence: SizeConfidence;
+      signals: string[];
     };
     legalNature: string;
   };
@@ -44,12 +58,17 @@ export interface EnrichedCompany {
     zipCode: string | null;
     city: string | null;
     state: string | null;
+    ibgeCode: string | null;
   };
   financial: {
     shareCapital: number;
     shareCapitalFormatted: string;
     optsForSimples: boolean;
     optsForMei: boolean;
+    taxRegime: {
+      latest: string;
+      year: number;
+    } | null;
   };
   history: {
     openingDate: string;
