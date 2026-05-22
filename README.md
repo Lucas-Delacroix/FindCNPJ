@@ -107,7 +107,7 @@ Resposta esperada:
 | Método | Rota | Descrição |
 |---|---|---|
 | `GET` | `/health` | Health check |
-| `GET` | `/cnpj/:cnpj` | (em construção) busca e enriquece dados de um CNPJ |
+| `GET` | `/cnpj/:cnpj` | Busca e enriquece dados de um CNPJ (aceita `?contato=Nome` para identificar cargo) |
 
 ## Decisões de Projeto
 
