@@ -44,9 +44,30 @@ const contentFor = (error: Error): ErrorContent => {
 export const ErrorState = ({ error }: ErrorStateProps) => {
   const { title, description } = contentFor(error);
   return (
-    <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-      <h3 className="text-base font-semibold text-red-900">{title}</h3>
-      <p className="mt-1 text-sm text-red-700">{description}</p>
+    <div className="rounded-card border border-red-200 bg-red-50/60 p-6 md:p-8">
+      <div className="flex items-start gap-4">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-pill bg-red-100 text-red-700">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
+            <path
+              d="M12 8v5m0 3.5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-base font-bold text-red-900">{title}</h3>
+          <p className="mt-1 text-sm text-red-700">{description}</p>
+        </div>
+      </div>
     </div>
   );
 };

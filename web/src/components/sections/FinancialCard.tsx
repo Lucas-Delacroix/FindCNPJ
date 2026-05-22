@@ -11,20 +11,20 @@ interface Props {
 export const FinancialCard = ({ financial, history }: Props) => {
   return (
     <Card title="Financeiro e histórico">
-      <dl className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <dl className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <dt className="text-xs uppercase tracking-wide text-slate-500">
+          <dt className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
             Capital social
           </dt>
-          <dd className="mt-0.5 text-sm font-semibold text-slate-900">
+          <dd className="mt-1 text-sm font-semibold text-ink">
             {financial.shareCapitalFormatted}
           </dd>
         </div>
         <div>
-          <dt className="text-xs uppercase tracking-wide text-slate-500">
+          <dt className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
             Abertura
           </dt>
-          <dd className="mt-0.5 text-sm text-slate-900">
+          <dd className="mt-1 text-sm text-ink">
             {formatDate(history.openingDate)} ({history.ageInYears} anos)
           </dd>
         </div>
@@ -34,7 +34,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
           )}
           {financial.optsForMei && <Badge variant="info">MEI</Badge>}
           {!financial.optsForSimples && !financial.optsForMei && (
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-ink-muted">
               Não optante por Simples/MEI
             </span>
           )}

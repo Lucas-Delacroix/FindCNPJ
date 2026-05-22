@@ -8,7 +8,7 @@ interface Props {
 export const AddressCard = ({ data }: Props) => {
   return (
     <Card title="Endereço">
-      <p className="text-sm text-slate-900">{data.full || "—"}</p>
+      <p className="text-sm leading-relaxed text-ink">{data.full || "—"}</p>
     </Card>
   );
 };

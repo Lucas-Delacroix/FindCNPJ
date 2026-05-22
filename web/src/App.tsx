@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Header } from "./components/Header";
+import { Hero } from "./components/Hero";
 import { LeadForm } from "./components/LeadForm";
 import { EnrichmentResult } from "./components/EnrichmentResult";
 import { LoadingState } from "./components/states/LoadingState";
@@ -23,22 +25,32 @@ function App() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">FindCNPJ</h1>
-        <p className="mt-1 text-sm text-slate-600">
-          Enriqueça leads com dados estratégicos da Receita Federal
-        </p>
-      </header>
+    <div className="min-h-full bg-surface">
+      <Header />
+      <main>
+        <Hero>
+          <div className="rounded-card-lg border border-line-soft bg-surface p-6 shadow-card md:p-8">
+            <h3 className="mb-5 font-display text-display-3 text-ink">
+              Dados do lead
+            </h3>
+            <LeadForm onSubmit={setSubmittedLead} isLoading={isLoading} />
+          </div>
+        </Hero>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-base font-semibold text-slate-900">
-          Dados do lead
-        </h2>
-        <LeadForm onSubmit={setSubmittedLead} isLoading={isLoading} />
-      </section>
+        {submittedLead && (
+          <section className="bg-surface-subtle">
+            <div className="mx-auto max-w-container px-4 py-16 md:px-6 md:py-20">
+              <div className="mx-auto max-w-3xl">{renderResult()}</div>
+            </div>
+          </section>
+        )}
+      </main>
 
-      {submittedLead && <div className="mt-6">{renderResult()}</div>}
+      <footer className="border-t border-line bg-surface">
+        <div className="mx-auto max-w-container px-4 py-8 text-xs text-ink-muted md:px-6">
+          FindCNPJ · Dados públicos da Receita Federal via BrasilAPI
+        </div>
+      </footer>
     </div>
   );
 }

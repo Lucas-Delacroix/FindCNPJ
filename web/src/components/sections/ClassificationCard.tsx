@@ -8,7 +8,7 @@ interface Props {
 export const ClassificationCard = ({ data }: Props) => {
   return (
     <Card title="Classificação" highlight>
-      <dl className="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <dl className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <Field label="Segmento" value={data.cnae.segment} emphasized />
         <Field label="Porte" value={data.size.category} emphasized />
         <Field
@@ -36,11 +36,11 @@ interface FieldProps {
 
 const Field = ({ label, value, emphasized, className = "" }: FieldProps) => (
   <div className={className}>
-    <dt className="text-xs uppercase tracking-wide text-slate-500">{label}</dt>
+    <dt className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted">
+      {label}
+    </dt>
     <dd
-      className={`mt-0.5 text-sm text-slate-900 ${
-        emphasized ? "font-semibold" : ""
-      }`}
+      className={`mt-1 text-sm text-ink ${emphasized ? "font-semibold" : ""}`}
     >
       {value}
     </dd>
