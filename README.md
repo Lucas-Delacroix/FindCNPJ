@@ -2,7 +2,6 @@
 
 Aplicação que enriquece dados de leads a partir de um CNPJ.
 
-> Teste técnico para vaga de desenvolvedor Júnior na Letalk.
 
 ## Sumário
 
