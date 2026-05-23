@@ -25,6 +25,7 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
   const phoneId = useId();
   const companyId = useId();
   const cnpjId = useId();
+  const nameHelpId = useId();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,99 +49,91 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <fieldset className="space-y-4">
-        <legend className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-ink-muted">
-          Busca
-        </legend>
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+      <Field
+        label="CNPJ"
+        required
+        error={errors.cnpj}
+        htmlFor={cnpjId}
+      >
+        <input
+          id={cnpjId}
+          type="text"
+          inputMode="numeric"
+          value={cnpj}
+          onChange={(e) => setCnpj(maskCnpj(e.target.value))}
+          className={`${inputClass(errors.cnpj)} font-mono tracking-wide`}
+          placeholder="00.000.000/0000-00"
+          maxLength={18}
+        />
+      </Field>
 
-        <Field
-          label="CNPJ"
-          required
-          error={errors.cnpj}
-          htmlFor={cnpjId}
-        >
+      <Field
+        label="Nome do contato"
+        htmlFor={nameId}
+        helperText="Para identificar o contato no QSA, se aplicável."
+        helperId={nameHelpId}
+      >
+        <input
+          id={nameId}
+          type="text"
+          autoComplete="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className={inputClass()}
+          placeholder="Maria Silva"
+          aria-describedby={nameHelpId}
+        />
+      </Field>
+
+      <SectionDivider label="Contato do lead" />
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Field label="E-mail" error={errors.email} htmlFor={emailId}>
           <input
-            id={cnpjId}
-            type="text"
-            inputMode="numeric"
-            value={cnpj}
-            onChange={(e) => setCnpj(maskCnpj(e.target.value))}
-            className={`${inputClass(errors.cnpj)} font-mono tracking-wide`}
-            placeholder="00.000.000/0000-00"
-            maxLength={18}
+            id={emailId}
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={inputClass(errors.email)}
+            placeholder="maria@empresa.com"
           />
         </Field>
 
-        <Field
-          label="Nome do contato"
-          hint="opcional — usado para tentar identificar o contato no QSA"
-          htmlFor={nameId}
-        >
+        <Field label="Telefone" htmlFor={phoneId}>
           <input
-            id={nameId}
-            type="text"
-            autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            id={phoneId}
+            type="tel"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className={inputClass()}
-            placeholder="Ex: João Silva"
+            placeholder="(11) 99999-9999"
           />
         </Field>
-      </fieldset>
+      </div>
 
-      <fieldset className="space-y-4 border-t border-line-soft pt-5">
-        <legend className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-ink-muted">
-          Contexto do lead (opcional, não afeta a busca)
-        </legend>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Field label="E-mail" error={errors.email} htmlFor={emailId}>
-            <input
-              id={emailId}
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={inputClass(errors.email)}
-              placeholder="joao@empresa.com"
-            />
-          </Field>
-
-          <Field label="Telefone" htmlFor={phoneId}>
-            <input
-              id={phoneId}
-              type="tel"
-              autoComplete="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className={inputClass()}
-              placeholder="(11) 99999-9999"
-            />
-          </Field>
-
-          <Field label="Empresa" htmlFor={companyId} className="md:col-span-2">
-            <input
-              id={companyId}
-              type="text"
-              autoComplete="organization"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className={inputClass()}
-              placeholder="Nome da empresa"
-            />
-          </Field>
-        </div>
-      </fieldset>
+      <Field label="Empresa" htmlFor={companyId}>
+        <input
+          id={companyId}
+          type="text"
+          autoComplete="organization"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          className={inputClass()}
+          placeholder="Nome da empresa do contato"
+        />
+      </Field>
 
       <button
         type="submit"
         disabled={isLoading}
-        className="group inline-flex w-full items-center justify-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-brand transition-all duration-200 hover:bg-brand-dark hover:shadow-brand-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+        className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-pill bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-brand transition-all duration-200 hover:bg-brand-dark hover:shadow-brand-lg active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
       >
         {isLoading ? (
           <>
-            <Spinner /> Buscando dados...
+            <Spinner /> Consultando...
           </>
         ) : (
           <>
@@ -158,7 +151,8 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
 interface FieldProps {
   label: string;
   required?: boolean;
-  hint?: string;
+  helperText?: string;
+  helperId?: string;
   error?: string;
   htmlFor: string;
   className?: string;
@@ -168,7 +162,8 @@ interface FieldProps {
 const Field = ({
   label,
   required,
-  hint,
+  helperText,
+  helperId,
   error,
   htmlFor,
   className,
@@ -180,15 +175,35 @@ const Field = ({
       className="mb-1.5 block text-sm font-medium text-ink-secondary"
     >
       {label}
-      {required && <span className="ml-0.5 text-brand">*</span>}
-      {hint && (
-        <span className="ml-1.5 text-xs font-normal text-ink-muted">
-          {hint}
+      {required && (
+        <span aria-hidden className="ml-0.5 text-brand">
+          *
         </span>
       )}
     </label>
     {children}
-    {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+    {helperText && !error && (
+      <p
+        id={helperId}
+        className="mt-1.5 text-xs text-ink-muted"
+      >
+        {helperText}
+      </p>
+    )}
+    {error && <p className="mt-1.5 text-xs text-red-600">{error}</p>}
+  </div>
+);
+
+const SectionDivider = ({ label }: { label: string }) => (
+  <div
+    role="separator"
+    aria-label={label}
+    className="flex items-center gap-3 pt-1"
+  >
+    <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-muted">
+      {label}
+    </span>
+    <div className="h-px flex-1 bg-line-soft" aria-hidden />
   </div>
 );
 
