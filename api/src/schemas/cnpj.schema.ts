@@ -1,3 +1,4 @@
+import "../lib/openapi-extend";
 import { z } from "zod";
 
 export const cnpjPathSchema = z.object({
@@ -6,11 +7,24 @@ export const cnpjPathSchema = z.object({
     .transform((value) => value.replace(/\D/g, ""))
     .refine((digits) => digits.length === 14, {
       message: "CNPJ must have 14 digits",
+    })
+    .openapi({
+      description: "CNPJ com 14 dígitos (pontuação opcional).",
+      example: "00000000000191",
     }),
 });
 
 export const cnpjQuerySchema = z.object({
-  contato: z.string().trim().min(1).optional(),
+  contato: z
+    .string()
+    .trim()
+    .min(1)
+    .optional()
+    .openapi({
+      description:
+        "Nome do contato do lead. Quando informado, a API tenta identificar o cargo no QSA.",
+      example: "Maria da Silva",
+    }),
 });
 
 const qsaEntrySchema = z
@@ -74,85 +88,115 @@ export const brasilApiCnpjResponseSchema = z
 export type BrasilApiCnpjResponse = z.infer<typeof brasilApiCnpjResponseSchema>;
 export type QsaEntry = BrasilApiCnpjResponse["qsa"][number];
 
-export interface LeadMatch {
-  name: string;
-  role: string;
-  since: string | null;
-}
+const leadMatchSchema = z
+  .object({
+    name: z.string(),
+    role: z.string(),
+    since: z.string().nullable(),
+  })
+  .openapi("LeadMatch", {
+    description:
+      "Sócio/administrador do QSA cujo nome bateu com o contato informado.",
+  });
 
-export type SizeConfidence = "high" | "medium" | "low";
+export const enrichedCompanySchema = z
+  .object({
+    identification: z.object({
+      cnpj: z.string(),
+      legalName: z.string(),
+      tradeName: z.string().nullable(),
+      displayName: z.string(),
+    }),
+    status: z.object({
+      description: z.string(),
+      active: z.boolean(),
+      since: z.string().nullable(),
+    }),
+    establishment: z.object({
+      type: z.enum(["Matriz", "Filial", "Não informado"]),
+      code: z.number().nullable(),
+    }),
+    classification: z.object({
+      cnae: z.object({
+        code: z.string(),
+        description: z.string(),
+        segment: z.string(),
+      }),
+      secondaryActivities: z.array(
+        z.object({
+          code: z.string(),
+          description: z.string(),
+          segment: z.string(),
+        })
+      ),
+      size: z.object({
+        code: z.string(),
+        description: z.string(),
+        category: z.string(),
+        estimatedEmployeeRange: z.string(),
+        revenueBand: z.string().nullable(),
+        confidence: z.enum(["high", "medium", "low"]),
+        signals: z.array(z.string()),
+      }),
+      legalNature: z.string(),
+    }),
+    contact: z.object({
+      primaryPhone: z.string().nullable(),
+      secondaryPhone: z.string().nullable(),
+      leadMatch: leadMatchSchema.nullable(),
+    }),
+    address: z.object({
+      full: z.string(),
+      street: z.string().nullable(),
+      number: z.string().nullable(),
+      complement: z.string().nullable(),
+      district: z.string().nullable(),
+      zipCode: z.string().nullable(),
+      city: z.string().nullable(),
+      state: z.string().nullable(),
+      ibgeCode: z.string().nullable(),
+    }),
+    financial: z.object({
+      shareCapital: z.number(),
+      shareCapitalFormatted: z.string(),
+      optsForSimples: z.boolean(),
+      optsForMei: z.boolean(),
+      taxRegime: z
+        .object({
+          latest: z.string(),
+          year: z.number(),
+        })
+        .nullable(),
+    }),
+    history: z.object({
+      openingDate: z.string(),
+      ageInYears: z.number(),
+    }),
+    partners: z.array(
+      z.object({
+        name: z.string(),
+        role: z.string(),
+        since: z.string().nullable(),
+      })
+    ),
+  })
+  .openapi("EnrichedCompany", {
+    description:
+      "Empresa enriquecida: identificação, classificação (CNAE → segmento), porte estimado com confidence, contato com leadMatch, endereço com IBGE e quadro societário.",
+  });
 
-export interface EnrichedCompany {
-  identification: {
-    cnpj: string;
-    legalName: string;
-    tradeName: string | null;
-    displayName: string;
-  };
-  status: {
-    description: string;
-    active: boolean;
-    since: string | null;
-  };
-  establishment: {
-    type: "Matriz" | "Filial" | "Não informado";
-    code: number | null;
-  };
-  classification: {
-    cnae: {
-      code: string;
-      description: string;
-      segment: string;
-    };
-    secondaryActivities: Array<{
-      code: string;
-      description: string;
-      segment: string;
-    }>;
-    size: {
-      code: string;
-      description: string;
-      category: string;
-      estimatedEmployeeRange: string;
-      revenueBand: string | null;
-      confidence: SizeConfidence;
-      signals: string[];
-    };
-    legalNature: string;
-  };
-  contact: {
-    primaryPhone: string | null;
-    secondaryPhone: string | null;
-    leadMatch: LeadMatch | null;
-  };
-  address: {
-    full: string;
-    street: string | null;
-    number: string | null;
-    complement: string | null;
-    district: string | null;
-    zipCode: string | null;
-    city: string | null;
-    state: string | null;
-    ibgeCode: string | null;
-  };
-  financial: {
-    shareCapital: number;
-    shareCapitalFormatted: string;
-    optsForSimples: boolean;
-    optsForMei: boolean;
-    taxRegime: {
-      latest: string;
-      year: number;
-    } | null;
-  };
-  history: {
-    openingDate: string;
-    ageInYears: number;
-  };
-  partners: Array<{
-    name: string;
-    role: string;
-    since: string | null;
-  }>;
-}
+export type EnrichedCompany = z.infer<typeof enrichedCompanySchema>;
+export type LeadMatch = z.infer<typeof leadMatchSchema>;
+export type SizeConfidence = EnrichedCompany["classification"]["size"]["confidence"];
+
+export const errorResponseSchema = z
+  .object({
+    error: z.object({
+      code: z.string(),
+      message: z.string(),
+      details: z.unknown().optional(),
+    }),
+  })
+  .openapi("ErrorResponse", {
+    description: "Formato padronizado de erro retornado pela API.",
+  });

@@ -26,7 +26,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     return;
   }
 
-  logger.error({ err, url: req.originalUrl }, "Erro não tratado");
+  logger.error({ err, url: req.originalUrl, requestId: req.id }, "Erro não tratado");
   res.status(500).json({
     error: {
       code: "INTERNAL_ERROR",
