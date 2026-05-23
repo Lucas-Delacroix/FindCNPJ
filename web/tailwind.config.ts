@@ -31,14 +31,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
-        display: [
-          '"Manrope"',
-          '"Inter"',
-          "ui-sans-serif",
-          "system-ui",
-          "sans-serif",
-        ],
+        sans: ['"Switzer"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Switzer"', "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
       letterSpacing: {
@@ -49,16 +43,16 @@ export default {
           "clamp(2.5rem, 5.2vw, 4.5rem)",
           {
             lineHeight: "1.02",
-            fontWeight: "800",
-            letterSpacing: "-0.02em",
+            fontWeight: "700",
+            letterSpacing: "-0.025em",
           },
         ],
         "display-2": [
           "clamp(2rem, 3.6vw, 3.4rem)",
           {
             lineHeight: "1.08",
-            fontWeight: "800",
-            letterSpacing: "-0.02em",
+            fontWeight: "700",
+            letterSpacing: "-0.025em",
           },
         ],
         "display-3": [
