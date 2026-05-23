@@ -118,12 +118,10 @@ const enrich = (
       },
       legalNature: raw.natureza_juridica ?? "",
     },
+    qsaMatch: contactName ? matchPartnerByName(contactName, raw.qsa) : null,
     contact: {
       primaryPhone: formatPhone(raw.ddd_telefone_1),
       secondaryPhone: formatPhone(raw.ddd_telefone_2),
-      leadMatch: contactName
-        ? matchPartnerByName(contactName, raw.qsa)
-        : null,
     },
     address: {
       full: formatFullAddress({

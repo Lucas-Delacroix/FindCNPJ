@@ -1,4 +1,4 @@
-export interface LeadMatch {
+export interface QsaMatch {
   name: string;
   role: string;
   since: string | null;
@@ -44,10 +44,10 @@ export interface EnrichedCompany {
     };
     legalNature: string;
   };
+  qsaMatch: QsaMatch | null;
   contact: {
     primaryPhone: string | null;
     secondaryPhone: string | null;
-    leadMatch: LeadMatch | null;
   };
   address: {
     full: string;

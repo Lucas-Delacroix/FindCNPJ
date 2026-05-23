@@ -1,4 +1,4 @@
-import type { LeadMatch, QsaEntry } from "../schemas/cnpj.schema";
+import type { QsaEntry, QsaMatch } from "../schemas/cnpj.schema";
 import { titleCase } from "./formatters";
 
 const DIACRITICS = /\p{Mn}/gu;
@@ -9,7 +9,7 @@ const normalize = (value: string): string =>
 export const matchPartnerByName = (
   contactName: string,
   partners: QsaEntry[]
-): LeadMatch | null => {
+): QsaMatch | null => {
   if (!contactName || partners.length === 0) return null;
 
   const target = normalize(contactName);

@@ -88,15 +88,15 @@ export const brasilApiCnpjResponseSchema = z
 export type BrasilApiCnpjResponse = z.infer<typeof brasilApiCnpjResponseSchema>;
 export type QsaEntry = BrasilApiCnpjResponse["qsa"][number];
 
-const leadMatchSchema = z
+const qsaMatchSchema = z
   .object({
     name: z.string(),
     role: z.string(),
     since: z.string().nullable(),
   })
-  .openapi("LeadMatch", {
+  .openapi("QsaMatch", {
     description:
-      "Sócio/administrador do QSA cujo nome bateu com o contato informado.",
+      "Sócio ou administrador do QSA cujo nome bateu com o contato informado. Não representa cargo profissional — apenas posição formal no quadro societário registrado na Receita Federal.",
   });
 
 export const enrichedCompanySchema = z
@@ -140,10 +140,10 @@ export const enrichedCompanySchema = z
       }),
       legalNature: z.string(),
     }),
+    qsaMatch: qsaMatchSchema.nullable(),
     contact: z.object({
       primaryPhone: z.string().nullable(),
       secondaryPhone: z.string().nullable(),
-      leadMatch: leadMatchSchema.nullable(),
     }),
     address: z.object({
       full: z.string(),
@@ -182,11 +182,11 @@ export const enrichedCompanySchema = z
   })
   .openapi("EnrichedCompany", {
     description:
-      "Empresa enriquecida: identificação, classificação (CNAE → segmento), porte estimado com confidence, contato com leadMatch, endereço com IBGE e quadro societário.",
+      "Empresa enriquecida: identificação, classificação (CNAE → segmento), porte estimado com confidence, identificação do contato no QSA (qsaMatch), endereço com IBGE e quadro societário completo.",
   });
 
 export type EnrichedCompany = z.infer<typeof enrichedCompanySchema>;
-export type LeadMatch = z.infer<typeof leadMatchSchema>;
+export type QsaMatch = z.infer<typeof qsaMatchSchema>;
 export type SizeConfidence = EnrichedCompany["classification"]["size"]["confidence"];
 
 export const errorResponseSchema = z
