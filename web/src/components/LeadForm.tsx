@@ -8,7 +8,6 @@ interface LeadFormProps {
 }
 
 interface FormErrors {
-  name?: string;
   email?: string;
   cnpj?: string;
 }
@@ -39,7 +38,6 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
     if (!result.success) {
       const flat = result.error.flatten().fieldErrors;
       setErrors({
-        name: flat.name?.[0],
         email: flat.email?.[0],
         cnpj: flat.cnpj?.[0],
       });
@@ -50,67 +48,17 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Field
-          label="Nome do contato"
-          required
-          error={errors.name}
-          htmlFor={nameId}
-        >
-          <input
-            id={nameId}
-            type="text"
-            autoComplete="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={inputClass(errors.name)}
-            placeholder="Ex: João Silva"
-          />
-        </Field>
-
-        <Field label="E-mail" error={errors.email} htmlFor={emailId}>
-          <input
-            id={emailId}
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={inputClass(errors.email)}
-            placeholder="joao@empresa.com"
-          />
-        </Field>
-
-        <Field label="Telefone" htmlFor={phoneId}>
-          <input
-            id={phoneId}
-            type="tel"
-            autoComplete="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className={inputClass()}
-            placeholder="(11) 99999-9999"
-          />
-        </Field>
-
-        <Field label="Empresa" htmlFor={companyId}>
-          <input
-            id={companyId}
-            type="text"
-            autoComplete="organization"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className={inputClass()}
-            placeholder="Nome da empresa"
-          />
-        </Field>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <fieldset className="space-y-4">
+        <legend className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-ink-muted">
+          Busca
+        </legend>
 
         <Field
           label="CNPJ"
           required
           error={errors.cnpj}
           htmlFor={cnpjId}
-          className="md:col-span-2"
         >
           <input
             id={cnpjId}
@@ -123,7 +71,67 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
             maxLength={18}
           />
         </Field>
-      </div>
+
+        <Field
+          label="Nome do contato"
+          hint="opcional — usado para tentar identificar o contato no QSA"
+          htmlFor={nameId}
+        >
+          <input
+            id={nameId}
+            type="text"
+            autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={inputClass()}
+            placeholder="Ex: João Silva"
+          />
+        </Field>
+      </fieldset>
+
+      <fieldset className="space-y-4 border-t border-line-soft pt-5">
+        <legend className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-ink-muted">
+          Contexto do lead (opcional, não afeta a busca)
+        </legend>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Field label="E-mail" error={errors.email} htmlFor={emailId}>
+            <input
+              id={emailId}
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={inputClass(errors.email)}
+              placeholder="joao@empresa.com"
+            />
+          </Field>
+
+          <Field label="Telefone" htmlFor={phoneId}>
+            <input
+              id={phoneId}
+              type="tel"
+              autoComplete="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className={inputClass()}
+              placeholder="(11) 99999-9999"
+            />
+          </Field>
+
+          <Field label="Empresa" htmlFor={companyId} className="md:col-span-2">
+            <input
+              id={companyId}
+              type="text"
+              autoComplete="organization"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className={inputClass()}
+              placeholder="Nome da empresa"
+            />
+          </Field>
+        </div>
+      </fieldset>
 
       <button
         type="submit"
@@ -136,7 +144,7 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
           </>
         ) : (
           <>
-            Enriquecer lead{" "}
+            Consultar CNPJ{" "}
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
               <Arrow />
             </span>
@@ -150,6 +158,7 @@ export const LeadForm = ({ onSubmit, isLoading = false }: LeadFormProps) => {
 interface FieldProps {
   label: string;
   required?: boolean;
+  hint?: string;
   error?: string;
   htmlFor: string;
   className?: string;
@@ -159,6 +168,7 @@ interface FieldProps {
 const Field = ({
   label,
   required,
+  hint,
   error,
   htmlFor,
   className,
@@ -171,6 +181,11 @@ const Field = ({
     >
       {label}
       {required && <span className="ml-0.5 text-brand">*</span>}
+      {hint && (
+        <span className="ml-1.5 text-xs font-normal text-ink-muted">
+          {hint}
+        </span>
+      )}
     </label>
     {children}
     {error && <p className="mt-1 text-xs text-red-600">{error}</p>}

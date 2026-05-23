@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const leadFormSchema = z.object({
-  name: z.string().trim().min(1, "Informe o nome do contato"),
+  name: z.string().trim().optional(),
   email: z
     .union([z.literal(""), z.string().email("E-mail inválido")])
     .optional(),

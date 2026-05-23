@@ -20,7 +20,13 @@ function App() {
   const renderResult = () => {
     if (isLoading) return <LoadingState />;
     if (isError && error) return <ErrorState error={error} />;
-    if (data) return <EnrichmentResult data={data} />;
+    if (data)
+      return (
+        <EnrichmentResult
+          data={data}
+          contactName={submittedLead?.name ?? ""}
+        />
+      );
     return null;
   };
 
