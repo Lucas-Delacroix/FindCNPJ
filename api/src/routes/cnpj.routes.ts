@@ -4,4 +4,7 @@ import { asyncHandler } from "../lib/async-handler";
 
 export const cnpjRoutes = Router();
 
-cnpjRoutes.get("/:cnpj", asyncHandler(cnpjController.findAndEnrich));
+const handler = asyncHandler(cnpjController.findAndEnrich);
+
+cnpjRoutes.get("/:cnpj", handler);
+cnpjRoutes.get("/:part1/:part2", handler);

@@ -9,7 +9,8 @@ export const cnpjPathSchema = z.object({
       message: "CNPJ must have 14 digits",
     })
     .openapi({
-      description: "CNPJ com 14 dígitos (pontuação opcional).",
+      description:
+        "CNPJ com 14 dígitos. Aceita apenas dígitos (`00000000000191`) ou o formato canônico com pontuação (`00.000.000/0001-91`). Pontos, barra e traço são opcionais.",
       example: "00000000000191",
     }),
 });
@@ -154,7 +155,10 @@ export const enrichedCompanySchema = z
       zipCode: z.string().nullable(),
       city: z.string().nullable(),
       state: z.string().nullable(),
-      ibgeCode: z.string().nullable(),
+      ibgeCode: z.string().nullable().openapi({
+        description:
+          "Código IBGE do município, obtido via ViaCEP a partir do CEP da empresa. É `null` quando o ViaCEP retorna erro, dá timeout, ou o CEP é inválido. A indisponibilidade do ViaCEP nunca impede a resposta principal — a API degrada graceful retornando apenas o que conseguiu enriquecer.",
+      }),
     }),
     financial: z.object({
       shareCapital: z.number(),
