@@ -29,11 +29,66 @@ export const formatCurrencyBRL = (value: number): string =>
     currency: "BRL",
   }).format(value);
 
+const ALWAYS_UPPER = new Set([
+  "SA",
+  "SS",
+  "ME",
+  "EPP",
+  "MEI",
+  "LTDA",
+  "EIRELI",
+  "CIA",
+  "II",
+  "III",
+  "IV",
+  "VI",
+  "VII",
+  "VIII",
+  "IX",
+  "XI",
+  "XII",
+]);
+
+const ALWAYS_LOWER = new Set([
+  "de",
+  "da",
+  "do",
+  "dos",
+  "das",
+  "e",
+  "em",
+  "a",
+  "o",
+  "as",
+  "os",
+]);
+
+const siglaKey = (token: string): string =>
+  token.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
 export const titleCase = (text: string | null | undefined): string => {
   if (!text) return "";
-  return text
-    .toLowerCase()
-    .replace(/(^|\s)(\p{L})/gu, (_, prefix, char) => prefix + char.toUpperCase());
+
+  const normalized = text.replace(/\bS\s+A\b/gi, "S.A.");
+
+  return normalized
+    .split(/(\s+)/)
+    .map((token, idx) => {
+      if (!/\p{L}/u.test(token)) return token;
+
+      const lower = token.toLowerCase();
+
+      if (ALWAYS_UPPER.has(siglaKey(token))) {
+        return token.toUpperCase();
+      }
+
+      if (idx > 0 && ALWAYS_LOWER.has(lower)) {
+        return lower;
+      }
+
+      return lower.replace(/^(\p{L})/u, (c) => c.toUpperCase());
+    })
+    .join("");
 };
 
 export const calculateAgeInYears = (isoDate: string): number => {
@@ -58,11 +113,26 @@ export interface AddressParts {
   zipCode?: string | null;
 }
 
+const streetAlreadyEndsWithNumber = (
+  street: string,
+  number: string
+): boolean => {
+  const escaped = number.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?:^|[\\s,])${escaped}\\s*$`).test(street);
+};
+
 export const formatFullAddress = (parts: AddressParts): string => {
   const segments: string[] = [];
 
   if (parts.street) {
-    segments.push(parts.number ? `${parts.street}, ${parts.number}` : parts.street);
+    const cleanStreet = parts.street.replace(/[,\s]+$/, "").trim();
+    const num = parts.number ? String(parts.number).trim() : "";
+
+    if (num && !streetAlreadyEndsWithNumber(cleanStreet, num)) {
+      segments.push(`${cleanStreet}, ${num}`);
+    } else {
+      segments.push(cleanStreet);
+    }
   }
   if (parts.complement) segments.push(parts.complement);
   if (parts.district) segments.push(parts.district);
