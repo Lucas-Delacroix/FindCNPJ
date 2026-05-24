@@ -12,7 +12,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
     <Card title="Financeiro e histórico" index="04">
       <dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+          <dt className="text-xs font-medium text-ink-muted">
             Capital social
           </dt>
           <dd className="mt-1.5 font-display text-2xl font-bold tracking-tight text-ink">
@@ -20,7 +20,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+          <dt className="text-xs font-medium text-ink-muted">
             Abertura
           </dt>
           <dd className="mt-1.5 text-sm text-ink">
@@ -33,7 +33,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
 
         {financial.taxRegime && (
           <div className="md:col-span-2">
-            <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+            <dt className="text-xs font-medium text-ink-muted">
               Regime tributário
             </dt>
             <dd className="mt-1.5 flex items-baseline gap-2">
@@ -51,7 +51,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
           {financial.optsForSimples && <Tag>Optante pelo Simples</Tag>}
           {financial.optsForMei && <Tag>MEI</Tag>}
           {!financial.optsForSimples && !financial.optsForMei && (
-            <span className="font-mono text-[11px] uppercase tracking-wider text-ink-muted">
+            <span className="text-xs text-ink-muted">
               Não optante por Simples / MEI
             </span>
           )}
@@ -62,7 +62,7 @@ export const FinancialCard = ({ financial, history }: Props) => {
 };
 
 const Tag = ({ children }: { children: string }) => (
-  <span className="inline-flex items-center rounded-md border border-line bg-surface-subtle px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-wider text-ink-secondary">
+  <span className="inline-flex items-center rounded-md border border-line bg-surface-subtle px-2.5 py-1 text-[11px] font-medium text-ink-secondary">
     {children}
   </span>
 );

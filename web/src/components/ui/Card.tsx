@@ -25,7 +25,7 @@ export const Card = ({
         <header className="mb-5 flex items-baseline gap-3">
           {index && (
             <span
-              className={`font-mono text-xs font-medium tracking-wider ${
+              className={`font-mono text-xs font-medium ${
                 highlight ? "text-brand" : "text-ink-muted"
               }`}
             >

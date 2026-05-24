@@ -200,9 +200,7 @@ const SectionDivider = ({ label }: { label: string }) => (
     aria-label={label}
     className="flex items-center gap-3 pt-1"
   >
-    <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-ink-muted">
-      {label}
-    </span>
+    <span className="text-xs font-medium text-ink-muted">{label}</span>
     <div className="h-px flex-1 bg-line-soft" aria-hidden />
   </div>
 );

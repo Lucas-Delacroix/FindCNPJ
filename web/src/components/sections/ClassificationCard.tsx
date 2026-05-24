@@ -64,7 +64,7 @@ const Field = ({
   className = "",
 }: FieldProps) => (
   <div className={className}>
-    <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+    <dt className="text-xs font-medium text-ink-muted">
       {label}
     </dt>
     <dd
@@ -102,11 +102,11 @@ const ConfidenceBlock = ({
   <div className="mt-6 border-t border-line-soft pt-5">
     <div className="flex flex-wrap items-center gap-3">
       <span
-        className={`inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider ${CONFIDENCE_CLASSES[confidence]}`}
+        className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold ${CONFIDENCE_CLASSES[confidence]}`}
       >
         {CONFIDENCE_LABEL[confidence]}
       </span>
-      <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink-muted">
+      <span className="text-xs font-medium text-ink-muted">
         Como estimamos
       </span>
     </div>
@@ -130,7 +130,7 @@ const SecondaryActivities = ({
   items: EnrichedCompany["classification"]["secondaryActivities"];
 }) => (
   <div className="mt-6 border-t border-line-soft pt-5">
-    <p className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+    <p className="text-xs font-medium text-ink-muted">
       Atividades complementares · {items.length}
     </p>
     <ul className="mt-3 space-y-2">
@@ -142,9 +142,7 @@ const SecondaryActivities = ({
           <span className="font-mono text-xs text-ink-muted">{item.code}</span>
           <div>
             <p className="text-ink">{item.description}</p>
-            <p className="font-mono text-[10px] uppercase tracking-wider text-ink-muted">
-              {item.segment}
-            </p>
+            <p className="text-xs text-ink-muted">{item.segment}</p>
           </div>
         </li>
       ))}

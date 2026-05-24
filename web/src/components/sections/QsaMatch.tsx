@@ -15,7 +15,7 @@ export const QsaMatch = ({ contactName, qsaMatch }: Props) => {
     return (
       <Card title="Contato no quadro societário" highlight>
         <div className="space-y-4">
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-brand">
+          <p className="text-xs font-semibold text-brand">
             Decisor formal identificado
           </p>
           <div>

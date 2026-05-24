@@ -11,11 +11,11 @@ export const CompanyHeader = ({ data }: Props) => {
       <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-ink-muted">
+            <p className="font-mono text-[11px] font-medium text-ink-muted">
               {identification.cnpj}
             </p>
             {establishment.type !== "Não informado" && (
-              <span className="inline-flex items-center rounded-md border border-line bg-surface-subtle px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-wider text-ink-secondary">
+              <span className="inline-flex items-center rounded-md border border-line bg-surface-subtle px-1.5 py-0.5 text-[11px] font-medium text-ink-secondary">
                 {establishment.type}
               </span>
             )}
@@ -25,7 +25,7 @@ export const CompanyHeader = ({ data }: Props) => {
           </h1>
           {identification.tradeName && (
             <p className="mt-2 text-xs text-ink-muted">
-              <span className="uppercase tracking-wider">Razão social</span>{" "}
+              <span className="font-medium">Razão social</span>{" "}
               <span className="text-ink-secondary">
                 {identification.legalName}
               </span>
@@ -33,7 +33,7 @@ export const CompanyHeader = ({ data }: Props) => {
           )}
         </div>
         <div
-          className={`inline-flex shrink-0 items-center gap-2 font-mono text-xs font-medium uppercase tracking-wider ${
+          className={`inline-flex shrink-0 items-center gap-2 text-xs font-semibold ${
             status.active ? "text-emerald-700" : "text-red-700"
           }`}
         >

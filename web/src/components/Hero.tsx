@@ -10,8 +10,8 @@ export const Hero = ({ children }: HeroProps) => {
       <div className="mx-auto max-w-container px-4 pt-14 pb-20 md:px-6 md:pt-24 md:pb-28">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:items-start md:gap-12 lg:gap-20">
           <div className="md:col-span-7">
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-ink-muted">
-              <span className="text-brand">●</span> Lead intelligence · Receita
+            <p className="flex items-center gap-2 text-xs font-medium text-ink-muted">
+              <span className="text-brand">●</span> Consulta pública · Receita
               Federal
             </p>
 

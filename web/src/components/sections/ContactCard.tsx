@@ -10,7 +10,7 @@ export const ContactCard = ({ data }: Props) => {
     <Card title="Contato" index="02">
       <dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
-          <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+          <dt className="text-xs font-medium text-ink-muted">
             Telefone principal
           </dt>
           <dd className="mt-1.5 font-mono text-sm text-ink">
@@ -19,7 +19,7 @@ export const ContactCard = ({ data }: Props) => {
         </div>
         {data.secondaryPhone && (
           <div>
-            <dt className="font-mono text-[10px] font-medium uppercase tracking-[0.15em] text-ink-muted">
+            <dt className="text-xs font-medium text-ink-muted">
               Secundário
             </dt>
             <dd className="mt-1.5 font-mono text-sm text-ink">
