@@ -34,6 +34,18 @@ const contentFor = (error: Error): ErrorContent => {
           description:
             "Não foi possível alcançar a API. Verifique se o backend está rodando em http://localhost:3000.",
         };
+      case "TIMEOUT":
+        return {
+          title: "Tempo esgotado",
+          description:
+            "A consulta demorou demais para responder. Tente novamente em instantes.",
+        };
+      case "INVALID_RESPONSE":
+        return {
+          title: "Resposta inesperada da API",
+          description:
+            "Os dados retornados não correspondem ao contrato esperado. Tente novamente ou contate o suporte.",
+        };
       default:
         return { title: "Erro", description: error.message };
     }

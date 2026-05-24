@@ -25,8 +25,17 @@ const SEGMENTS: SegmentRange[] = [
   { min: 94, max: 99, segment: "Outros Serviços" },
 ];
 
+const extractDivision = (cnaeCode: number): number | null => {
+  if (!Number.isFinite(cnaeCode) || cnaeCode <= 0) return null;
+  const padded = String(Math.floor(cnaeCode)).padStart(7, "0");
+  const division = Number(padded.slice(0, 2));
+  if (!Number.isFinite(division) || division < 1 || division > 99) return null;
+  return division;
+};
+
 export const mapCnaeToSegment = (cnaeCode: number): string => {
-  const division = Math.floor(cnaeCode / 100000);
+  const division = extractDivision(cnaeCode);
+  if (division === null) return "Não classificado";
   const match = SEGMENTS.find((s) => division >= s.min && division <= s.max);
   return match?.segment ?? "Não classificado";
 };

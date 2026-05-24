@@ -33,26 +33,35 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
 
   if (regime === "Lucro Real") {
     signals.push("Regime tributário: Lucro Real");
+    signals.push(
+      "Lucro Real indica faturamento elevado (> R$ 78M/ano), mas headcount não é correlacionado diretamente"
+    );
     return {
-      category: "Grande Empresa",
-      estimatedEmployeeRange: "100 ou mais funcionários",
+      category: "Provavelmente Grande Empresa",
+      estimatedEmployeeRange: "Possivelmente 100 ou mais funcionários",
       revenueBand: "Acima de R$ 78 milhões/ano",
-      confidence: "high",
+      confidence: "medium",
       signals,
     };
   }
   if (regime === "Lucro Presumido") {
     signals.push("Regime tributário: Lucro Presumido");
+    signals.push(
+      "Lucro Presumido cobre faixa ampla de faturamento (até R$ 78M/ano); headcount é apenas estimado"
+    );
     return {
-      category: "Empresa de Médio Porte",
-      estimatedEmployeeRange: "50 a 99 funcionários",
+      category: "Provavelmente Médio Porte",
+      estimatedEmployeeRange: "Possivelmente 50 a 99 funcionários",
       revenueBand: "Até R$ 78 milhões/ano",
-      confidence: "high",
+      confidence: "medium",
       signals,
     };
   }
   if (regime === "Simples Nacional") {
     signals.push("Regime tributário: Simples Nacional");
+    signals.push(
+      "Simples Nacional tem teto legal de R$ 4,8M/ano, classificando como Pequena Empresa por definição"
+    );
     return {
       category: "Pequena Empresa (Simples)",
       estimatedEmployeeRange: "1 a 49 funcionários",
