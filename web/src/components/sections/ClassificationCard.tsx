@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type {
   EnrichedCompany,
   SizeConfidence,
@@ -13,7 +14,12 @@ export const ClassificationCard = ({ data }: Props) => {
     <Card title="Classificação" index="01" highlight>
       <dl className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <Field label="Segmento" value={data.cnae.segment} emphasized />
-        <Field label="Porte" value={data.size.category} emphasized />
+        <Field
+          label="Porte"
+          value={data.size.category}
+          emphasized
+          accessory={<ConfidenceBadge confidence={data.size.confidence} />}
+        />
         <Field
           label="Funcionários (estimado)"
           value={data.size.estimatedEmployeeRange}
@@ -36,10 +42,6 @@ export const ClassificationCard = ({ data }: Props) => {
         />
       </dl>
 
-      <div className="mt-6 border-t border-line-soft pt-5">
-        <ConfidenceBadge confidence={data.size.confidence} />
-      </div>
-
       {data.secondaryActivities.length > 0 && (
         <SecondaryActivities items={data.secondaryActivities} />
       )}
@@ -53,6 +55,7 @@ interface FieldProps {
   subline?: string;
   emphasized?: boolean;
   className?: string;
+  accessory?: ReactNode;
 }
 
 const Field = ({
@@ -61,6 +64,7 @@ const Field = ({
   subline,
   emphasized,
   className = "",
+  accessory,
 }: FieldProps) => (
   <div className={className}>
     <dt className="text-xs font-medium text-ink-muted">
@@ -71,7 +75,14 @@ const Field = ({
         emphasized ? "text-base font-semibold" : "text-sm"
       }`}
     >
-      {value}
+      {accessory ? (
+        <span className="inline-flex flex-wrap items-baseline gap-2">
+          <span>{value}</span>
+          {accessory}
+        </span>
+      ) : (
+        value
+      )}
     </dd>
     {subline && (
       <p className="mt-0.5 font-mono text-xs text-ink-muted">{subline}</p>
