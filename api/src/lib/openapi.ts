@@ -4,6 +4,7 @@ import {
   OpenAPIRegistry,
 } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
+import { env } from "../config/env";
 import {
   cnpjPathSchema,
   cnpjQuerySchema,
@@ -86,6 +87,19 @@ registry.registerPath({
 
 const generator = new OpenApiGeneratorV3(registry.definitions);
 
+const buildServers = () => {
+  const servers: Array<{ url: string; description: string }> = [];
+  const publicUrl = env.PUBLIC_API_URL ?? env.RENDER_EXTERNAL_URL;
+  if (publicUrl) {
+    servers.push({ url: publicUrl, description: "Produção" });
+  }
+  servers.push({
+    url: `http://localhost:${env.PORT}`,
+    description: "Local",
+  });
+  return servers;
+};
+
 export const openapiDocument = generator.generateDocument({
   openapi: "3.0.3",
   info: {
@@ -100,10 +114,5 @@ export const openapiDocument = generator.generateDocument({
       name: "MIT",
     },
   },
-  servers: [
-    {
-      url: "http://localhost:3000",
-      description: "Local",
-    },
-  ],
+  servers: buildServers(),
 });
