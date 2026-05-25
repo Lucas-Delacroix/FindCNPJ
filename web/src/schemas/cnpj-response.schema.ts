@@ -40,7 +40,6 @@ export const enrichedCompanySchema = z.object({
       estimatedEmployeeRange: z.string(),
       revenueBand: z.string().nullable(),
       confidence: sizeConfidenceSchema,
-      signals: z.array(z.string()),
     }),
     legalNature: z.string(),
   }),

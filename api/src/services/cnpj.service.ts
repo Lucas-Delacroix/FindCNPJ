@@ -114,7 +114,6 @@ const enrich = (
         estimatedEmployeeRange: companySize.estimatedEmployeeRange,
         revenueBand: companySize.revenueBand,
         confidence: companySize.confidence,
-        signals: companySize.signals,
       },
       legalNature: raw.natureza_juridica ?? "",
     },

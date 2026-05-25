@@ -137,7 +137,6 @@ export const enrichedCompanySchema = z
         estimatedEmployeeRange: z.string(),
         revenueBand: z.string().nullable(),
         confidence: z.enum(["high", "medium", "low"]),
-        signals: z.array(z.string()),
       }),
       legalNature: z.string(),
     }),

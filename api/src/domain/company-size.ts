@@ -5,7 +5,6 @@ export interface CompanySize {
   estimatedEmployeeRange: string;
   revenueBand: string | null;
   confidence: SizeConfidence;
-  signals: string[];
 }
 
 export interface CompanySizeInputs {
@@ -34,7 +33,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
       estimatedEmployeeRange: "1 a 49 funcionários",
       revenueBand: "Até R$ 4,8 milhões/ano",
       confidence: "high",
-      signals: ["Regime tributário: Simples Nacional (teto legal de R$ 4,8M/ano)"],
     };
   }
   if (regime === "Lucro Real") {
@@ -43,7 +41,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
       estimatedEmployeeRange: "100 ou mais funcionários",
       revenueBand: "Acima de R$ 78 milhões/ano",
       confidence: "high",
-      signals: ["Regime tributário: Lucro Real (faturamento > R$ 78M/ano por obrigação legal)"],
     };
   }
   if (regime === "Lucro Presumido") {
@@ -52,7 +49,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
       estimatedEmployeeRange: "50 a 99 funcionários",
       revenueBand: "Até R$ 78 milhões/ano",
       confidence: "high",
-      signals: ["Regime tributário: Lucro Presumido (faturamento até R$ 78M/ano)"],
     };
   }
 
@@ -63,7 +59,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
         estimatedEmployeeRange: "1 a 9 funcionários",
         revenueBand: "Até R$ 360 mil/ano",
         confidence: "medium",
-        signals: ["Porte registrado: Microempresa"],
       };
     case 3:
       return {
@@ -71,7 +66,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
         estimatedEmployeeRange: "10 a 49 funcionários",
         revenueBand: "R$ 360 mil a R$ 4,8 milhões/ano",
         confidence: "medium",
-        signals: ["Porte registrado: Empresa de Pequeno Porte"],
       };
     case 5:
       return {
@@ -79,7 +73,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
         estimatedEmployeeRange: "50 a 99 funcionários",
         revenueBand: null,
         confidence: "medium",
-        signals: ["Porte registrado: Demais"],
       };
     default:
       return {
@@ -87,7 +80,6 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
         estimatedEmployeeRange: "Não estimado",
         revenueBand: null,
         confidence: "low",
-        signals: ["Sem porte registrado e sem regime tributário"],
       };
   }
 };

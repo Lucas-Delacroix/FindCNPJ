@@ -36,10 +36,9 @@ export const ClassificationCard = ({ data }: Props) => {
         />
       </dl>
 
-      <ConfidenceBlock
-        confidence={data.size.confidence}
-        signals={data.size.signals}
-      />
+      <div className="mt-6 border-t border-line-soft pt-5">
+        <ConfidenceBadge confidence={data.size.confidence} />
+      </div>
 
       {data.secondaryActivities.length > 0 && (
         <SecondaryActivities items={data.secondaryActivities} />
@@ -92,36 +91,12 @@ const CONFIDENCE_CLASSES: Record<SizeConfidence, string> = {
   low: "border-line bg-surface-subtle text-ink-muted",
 };
 
-const ConfidenceBlock = ({
-  confidence,
-  signals,
-}: {
-  confidence: SizeConfidence;
-  signals: string[];
-}) => (
-  <div className="mt-6 border-t border-line-soft pt-5">
-    <div className="flex flex-wrap items-center gap-3">
-      <span
-        className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold ${CONFIDENCE_CLASSES[confidence]}`}
-      >
-        {CONFIDENCE_LABEL[confidence]}
-      </span>
-      <span className="text-xs font-medium text-ink-muted">
-        Como estimamos
-      </span>
-    </div>
-    <ul className="mt-3 space-y-1.5">
-      {signals.map((signal, idx) => (
-        <li
-          key={idx}
-          className="flex items-start gap-2 text-sm text-ink-secondary"
-        >
-          <span className="mt-2 inline-block h-1 w-1 rounded-full bg-brand" />
-          <span>{signal}</span>
-        </li>
-      ))}
-    </ul>
-  </div>
+const ConfidenceBadge = ({ confidence }: { confidence: SizeConfidence }) => (
+  <span
+    className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-semibold ${CONFIDENCE_CLASSES[confidence]}`}
+  >
+    {CONFIDENCE_LABEL[confidence]}
+  </span>
 );
 
 const SecondaryActivities = ({
