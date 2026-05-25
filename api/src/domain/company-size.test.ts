@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mapCompanySize } from "./company-size";
 
 describe("mapCompanySize", () => {
-  it("classifica Simples Nacional com alta confiança (teto legal de R$ 4,8M)", () => {
+  it("classifica Simples Nacional como Pequena Empresa com alta confiança", () => {
     const result = mapCompanySize({
       shareCapital: 100_000,
       taxRegime: "Simples Nacional",
@@ -11,11 +11,12 @@ describe("mapCompanySize", () => {
     expect(result.confidence).toBe("high");
   });
 
-  it("rebaixa confiança para 'medium' em Lucro Real (faturamento ≠ headcount)", () => {
+  it("classifica Lucro Real como Grande Empresa com confiança média", () => {
     const result = mapCompanySize({
       shareCapital: 5_000_000,
       taxRegime: "LUCRO REAL",
     });
+    expect(result.category).toBe("Grande Empresa");
     expect(result.confidence).toBe("medium");
   });
 
