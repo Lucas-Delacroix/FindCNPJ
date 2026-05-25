@@ -11,13 +11,13 @@ describe("mapCompanySize", () => {
     expect(result.confidence).toBe("high");
   });
 
-  it("classifica Lucro Real como Grande Empresa com confiança média", () => {
+  it("classifica Lucro Real como Grande Empresa com alta confiança", () => {
     const result = mapCompanySize({
       shareCapital: 5_000_000,
       taxRegime: "LUCRO REAL",
     });
     expect(result.category).toBe("Grande Empresa");
-    expect(result.confidence).toBe("medium");
+    expect(result.confidence).toBe("high");
   });
 
   it("retorna 'Não classificada' com confiança baixa sem nenhum sinal", () => {

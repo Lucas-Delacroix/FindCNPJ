@@ -42,8 +42,8 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
       category: "Grande Empresa",
       estimatedEmployeeRange: "100 ou mais funcionários",
       revenueBand: "Acima de R$ 78 milhões/ano",
-      confidence: "medium",
-      signals: ["Regime tributário: Lucro Real"],
+      confidence: "high",
+      signals: ["Regime tributário: Lucro Real (faturamento > R$ 78M/ano por obrigação legal)"],
     };
   }
   if (regime === "Lucro Presumido") {
@@ -51,8 +51,8 @@ export const mapCompanySize = (inputs: CompanySizeInputs): CompanySize => {
       category: "Empresa de Médio Porte",
       estimatedEmployeeRange: "50 a 99 funcionários",
       revenueBand: "Até R$ 78 milhões/ano",
-      confidence: "medium",
-      signals: ["Regime tributário: Lucro Presumido"],
+      confidence: "high",
+      signals: ["Regime tributário: Lucro Presumido (faturamento até R$ 78M/ano)"],
     };
   }
 
